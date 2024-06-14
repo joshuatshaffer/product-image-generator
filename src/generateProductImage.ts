@@ -19,9 +19,59 @@ interface ShapeArgs {
 }
 
 const shapes = {
-  ball: ({ patternId }: ShapeArgs) => /* HTML */ `
-    <circle cx="512" cy="512" r="502" fill="url(#${patternId})" />
-  `,
+  ball: ({ patternId }: ShapeArgs) => {
+    const linearGradientId = randomId();
+    const radialGradientId = randomId();
+
+    return /* HTML */ `
+      <defs>
+        <linearGradient id="${linearGradientId}">
+          <stop
+            style="stop-color:#000000;stop-opacity:0"
+            offset="0"
+            id="stop1548"
+          />
+          <stop
+            style="stop-color:#000000;stop-opacity:0.00380334"
+            offset="0.74906671"
+            id="stop3464"
+          />
+          <stop
+            style="stop-color:#000000;stop-opacity:0.46965486"
+            offset="1"
+            id="stop1550"
+          />
+        </linearGradient>
+        <radialGradient
+          href="#${linearGradientId}"
+          id="${radialGradientId}"
+          cx="298.46671"
+          cy="433.78925"
+          fx="298.46671"
+          fy="433.78925"
+          r="406.40756"
+          gradientUnits="userSpaceOnUse"
+          gradientTransform="matrix(1.1277109,0.79506189,-0.8168174,1.1585691,339.60432,-390.58626)"
+        />
+      </defs>
+      <circle
+        fill="url(#${patternId})"
+        id="circle3944"
+        cx="515.15753"
+        cy="507.07953"
+        r="406.40756"
+      />
+      <circle
+        fill="url(#${radialGradientId})"
+        stroke="#000"
+        stroke-width="3"
+        id="path936"
+        cx="515.15753"
+        cy="507.07953"
+        r="406.40756"
+      />
+    `;
+  },
   block: ({ patternId }: ShapeArgs) => /* HTML */ `
     <rect x="10" y="10" width="1004" height="1004" fill="url(#${patternId})" />
   `,
@@ -79,7 +129,7 @@ export function generateProductImage({
 
   asImage = false,
 }: GenerateProductImageOptions = {}) {
-  const patternId = Math.random().toString(36).substring(7);
+  const patternId = randomId();
 
   return /* HTML */ `
     <svg
@@ -109,4 +159,7 @@ export function generateProductImage({
       ${shapes[shapeName]({ patternId })}
     </svg>
   `;
+}
+function randomId() {
+  return Math.random().toString(36).substring(7);
 }
