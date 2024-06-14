@@ -1,10 +1,14 @@
 import express from "express";
+import { textureNames } from "./textureNames";
+import { generateProductImage } from "./generateProductImage";
 
 const app = express();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
+app.use("/textures", express.static("textures"));
+
+app.get("/", (req, res, next) => {
+  res.type("svg").send(generateProductImage());
 });
 
 app.listen(port, () => {
